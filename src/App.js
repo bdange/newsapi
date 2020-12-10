@@ -1,56 +1,101 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const App = () => {
   //state
-  const [news, setNews] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('react');
+  const [info, setInfo] = useState([]);
+  const [repos, setRepos] = useState([]);
+  const [searchUser, setSearchUser] = useState('bdange');
   const [url, setUrl] = useState(
-    'https://hn.algolia.com/api/v1/search?query=react'
+    'https://api.github.com/users/bdange'
   );
+  const [reposURL, setReposURL] = useState(
+    'https://api.github.com/users/bdange/repos'
+  )
   const [loading, setLoading] = useState(false);
   //fetch news
-  const fetchNews = () => {
+  const fetchInfo = () => {
     // set loading true
     setLoading(true);
     fetch(url)
       .then((result) => result.json())
       // .then((data) => console.log(data));
-      .then((data) => (setNews(data.hits), setLoading(false)))
+      .then((data) => (setInfo(data), setLoading(false)))
+      .catch((error) => console.log(error));
+  };
+
+  const fetchRepos = () => {
+    // set loading true
+    setLoading(true);
+    fetch(reposURL)
+      .then((result) => result.json())
+      // .then((data) => console.log(data));
+      .then((data) => (setRepos(data), setLoading(false)))
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
-    fetchNews();
-  }, [url]);
+    fetchInfo();
+    fetchRepos();
+  }, [url, reposURL]);
 
   const handleChange = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchUser(e.target.value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setUrl(`https://hn.algolia.com/api/v1/search?query=${searchQuery}`);
+    setUrl(`https://api.github.com/users/${searchUser}`);
+    setReposURL(`https://api.github.com/users/${searchUser}/repos`);
   };
 
   const showLoading = () => (loading ? <h2>Loading...</h2> : '');
 
   const searchForm = () => (
-    <form onSubmit={handleSubmit}>
-      <input type='text' value={searchQuery} onChange={handleChange} />
+    <form className="block ml" onSubmit={handleSubmit}>
+          <label className="font mr">Enter a GitHub username to see their repository</label>
+          <input type='text' value={searchUser} onChange={handleChange} />
       <button>Search</button>
     </form>
   );
 
   const showNews = () => {
-    return news.map((n, i) => <p key={i}>{n.title}</p>);
+    console.log("This is info", info)
+    return (
+    <div className="profile align">
+    
+      <div className="block mb">
+
+      <a href={info.html_url} target="_blank" rel="noopener noreferrer">
+    <label className="mrBig">{info.login}</label>
+    <img src={info.avatar_url} />
+    </a>
+      </div>
+    
+    </div>
+    )
+  };
+
+  const showRepos = () => {
+    console.log('repos', repos)
+    return repos.map((n, i) => (
+      <div className="repositories">
+        <div className="details">
+        <a href={n.html_url} target="_blank" rel="noopener noreferrer">
+        <h4 key={i}>{n.name}</h4>
+        </a>
+     <p>{n.description}</p>
+     </div>
+      </div>
+    ));
   };
 
   return (
-    <div>
-      <h2>News</h2>
-      {showLoading()}
+    <div className="main">
+      <h1 className="font align">Welcome to your GitHub search Engine</h1>
       {searchForm()}
+      {showLoading()}
       {showNews()}
+      {showRepos()}
     </div>
   );
 };

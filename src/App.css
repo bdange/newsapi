@@ -1,0 +1,60 @@
+html,
+#root {
+  background-color: #fff7e6;
+}
+.main {
+  margin: 20px;
+}
+.font {
+  font-family: 'Andika New Basic', sans-serif;
+}
+.ml {
+  margin-left: 150px;
+}
+.mr {
+  margin-right: 5px;
+  font-size: 1.5vw;
+}
+.mb {
+  margin-bottom: 30px;
+}
+.mrBig {
+  margin-right: 10px;
+  font-size: 35px;
+}
+.align {
+  text-align: center;
+}
+h2 {
+  margin-top: 40px;
+}
+.block {
+  margin-top: 40px;
+  width: 100%;
+}
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+}
+a {
+  color: black;
+}
+img {
+  width: 12%;
+  border-radius: 50%;
+}
+label {
+  margin-bottom: 0;
+}
+.repositories {
+  width: 20%;
+  margin: 25px;
+  border-style: dotted;
+  border-width: 2px;
+  border-color: #ffdfcc;
+  display: inline-flex;
+}
+.details {
+  margin: 10px;
+  overflow: hidden;
+}
